@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafu
+  namespace: vocaloid
+  labels:
+    app: kafu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kafu
+  template:
+    metadata:
+      labels:
+        app: kafu
+    spec:
+      containers:
+        - name: kafu
+          image: kix.ocir.io/nro0opflyunj/kafu/kafu:fc3e0ab
+          command: ["./bin/kafu"]
+          env:
+            - name: NEO4J_URI
+              valueFrom:
+                secretKeyRef:
+                  name: kafu-secret
+                  key: neo4jURI
+            - name: NEO4J_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kafu-secret
+                  key: neo4jUsername
+            - name: NEO4J_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafu-secret
+                  key: neo4jPassword
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: ocirsecret
