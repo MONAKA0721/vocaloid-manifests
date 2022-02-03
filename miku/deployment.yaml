@@ -1,24 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafu
+  name: miku
   namespace: vocaloid
   labels:
-    app: kafu
+    app: miku
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: kafu
+      app: miku
   template:
     metadata:
       labels:
-        app: kafu
+        app: miku
     spec:
       containers:
-        - name: kafu
-          image: kix.ocir.io/nro0opflyunj/kafu/kafu:fc3e0ab
-          command: ["./bin/kafu"]
+        - name: miku
+          image: kix.ocir.io/nro0opflyunj/miku/miku:1b0acdd
           env:
             - name: NEO4J_URI
               valueFrom:
@@ -36,6 +35,6 @@ spec:
                   name: vocaloid-secret
                   key: neo4jPassword
           ports:
-            - containerPort: 8080
+            - containerPort: 80
       imagePullSecrets:
         - name: ocirsecret
